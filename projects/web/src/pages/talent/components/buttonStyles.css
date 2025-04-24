@@ -1,0 +1,40 @@
+/* 移除按钮选中和聚焦时的黑色边框 */
+.no-outline-btn {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.no-outline-btn:focus,
+.no-outline-btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 确保按钮按下后的效果不带有边框 */
+.ant-btn:focus,
+.ant-btn:active,
+.ant-btn-primary:focus,
+.ant-btn-primary:active,
+.ant-btn-dashed:focus,
+.ant-btn-dashed:active,
+.ant-btn-text:focus,
+.ant-btn-text:active,
+.ant-btn-link:focus,
+.ant-btn-link:active,
+.ant-btn-danger:focus,
+.ant-btn-danger:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 处理按钮的悬停效果，保留颜色变化但移除边框 */
+.ant-btn:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 覆盖Ant Design的默认按钮边框 */
+button.ant-btn::after {
+  box-shadow: none !important;
+  outline: none !important;
+} 

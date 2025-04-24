@@ -2,12 +2,14 @@ export type ExtractTaskType =
   | "pdf"
   | "formula-detect"
   | "formula-extract"
-  | "table-recogn";
+  | "table-recogn"
+  | "talent";
 
 export const EXTRACTOR_TYPE_LIST = {
   table: "table",
   formula: "formula",
   pdf: "PDF",
+  talent: "talent",
 };
 
 export enum FORMULA_TYPE {

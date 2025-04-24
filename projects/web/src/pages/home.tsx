@@ -4,7 +4,6 @@ import ErrorBoundary from "@/components/error-boundary";
 import styles from "./home.module.scss";
 import { SlotID, Path } from "@/constant/route";
 import {
-  BrowserRouter,
   Routes,
   Route,
   Outlet,
@@ -16,6 +15,7 @@ import { ExtractorSide } from "./extract-side";
 import { LanguageProvider } from "@/context/language-provider";
 import PDFUpload from "@/pages/extract/components/pdf-upload";
 import PDFExtractionJob from "@/pages/extract/components/pdf-extraction";
+import TalentManagement from "@/pages/talent";
 
 export function WindowContent() {
   const location = useLocation();
@@ -48,6 +48,10 @@ function Screen() {
             <Route
               path="/OpenSourceTools/Extractor/PDF/:jobID"
               element={<PDFExtractionJob />}
+            />
+            <Route
+              path="/OpenSourceTools/Extractor/talent"
+              element={<TalentManagement />}
             />
             <Route
               path="*"

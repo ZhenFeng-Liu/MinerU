@@ -13,6 +13,10 @@ export default {
     //   label: "公式检测与识别",
     //   type: EXTRACTOR_TYPE_LIST.formula,
     // },
+    {
+      label: "人才管理",
+      type: EXTRACTOR_TYPE_LIST.talent,
+    },
   ],
   "extractor.side.guide_list": [
     {

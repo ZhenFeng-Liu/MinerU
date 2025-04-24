@@ -13,6 +13,10 @@ export default {
     //   label: "Formula Extraction",
     //   type: EXTRACTOR_TYPE_LIST.formula,
     // },
+    {
+      label: "Talent Management",
+      type: EXTRACTOR_TYPE_LIST.talent,
+    },
   ],
   "extractor.side.guide_list": [
     {

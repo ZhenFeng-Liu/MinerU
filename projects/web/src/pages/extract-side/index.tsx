@@ -8,6 +8,7 @@ import { EXTRACTOR_TYPE_LIST } from "@/types/extract-task-type";
 import extractorPdfIcon from "@/assets/pdf/extractor-pdf.svg";
 import extractorTableIcon from "@/assets/pdf/extractor-table.svg";
 import extractorFormulaIcon from "@/assets/pdf/extractor-formula.svg";
+import { UserOutlined } from '@ant-design/icons';
 import { useIntl } from "react-intl";
 import cls from "classnames";
 import ExtractorGuide from "@/pages/extract/components/extractor-guide";
@@ -58,6 +59,10 @@ export const ExtractorSide = ({ className = "" }: IExtractorSideProps) => {
           return extractorTableIcon;
         case EXTRACTOR_TYPE_LIST.formula:
           return extractorFormulaIcon;
+        case EXTRACTOR_TYPE_LIST.talent:
+          return '';
+        default:
+          return '';
       }
     };
     return {
@@ -93,7 +98,11 @@ export const ExtractorSide = ({ className = "" }: IExtractorSideProps) => {
               className={cls(menuClass, getIconStyle(i.type)?.tabClassName)}
               onClick={() => handleMenuClick(i.type)}
             >
-              <img src={getIconStyle(i.type).icon} className="mr-2 w-6 h-6" />
+              {i.type === EXTRACTOR_TYPE_LIST.talent ? (
+                <UserOutlined className="mr-2" style={{ fontSize: '1.5rem' }} />
+              ) : (
+                <img src={getIconStyle(i.type).icon} className="mr-2 w-6 h-6" alt={`${i.label} icon`} />
+              )}
               {i.label}
             </div>
           ))}
