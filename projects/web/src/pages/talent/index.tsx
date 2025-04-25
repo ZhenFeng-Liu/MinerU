@@ -6,11 +6,17 @@ import TalentTable from './components/TalentTable';
 import TalentSearch from './components/TalentSearch';
 import TalentStatusModal from './components/TalentStatusModal';
 import TalentFormModal from './components/TalentFormModal';
-import { getTalentList, batchDeleteTalent } from '../../api/talent';
-import { TalentInfo, TalentSearchParams, TalentStatus } from '../../types/talent';
+import { TalentInfo, TalentSearchParams, TalentStatus, Gender } from '../../types/talent';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import './components/buttonStyles.css'; // 导入按钮样式
-
+// 导入需要使用的接口和方法
+import { 
+  deleteTalents, 
+  queryTalents,
+  TalentItem,
+  TalentQueryParams,
+  TalentListResponse
+} from '../../api/talentapi';
 const { Title } = Typography;
 
 interface SearchFormValues {
@@ -39,15 +45,47 @@ const TalentManagement: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const params: TalentSearchParams = {
-        ...searchParams,
-        current,
-        pageSize,
+      // 将搜索参数转换为新API的查询参数格式
+      const params: TalentQueryParams = {
+        keyword: searchParams.keyword,
+        statue: searchParams.status, // 注意字段名从status变为statue
+        page: current,
+        per_page: pageSize,
+        start_date: searchParams.startTime,
+        end_date: searchParams.endTime,
       };
-
-      const res = await getTalentList(params);
-      setDataSource(res.data);
-      setTotal(res.total);
+      
+      // 如果有id参数，添加到查询中
+      if (searchParams.id) {
+        params.id = searchParams.id;
+      }
+      
+      console.log('查询参数:', params);
+      const response = await queryTalents(params);
+      console.log('查询结果:', response);
+      
+      // 处理API返回的数据
+      // 根据http.ts中的处理，API响应在response.data.data中
+      const apiResponseData = response.data?.data as TalentListResponse;
+      const talentItems = apiResponseData?.dates || [];
+      const totalCount = apiResponseData?.total || 0;
+      
+      // 将 TalentItem[] 转换为 TalentInfo[]
+      const talentInfoList = talentItems.map((item: TalentItem) => ({
+        id: String(item.id || ''),
+        name: item.name || '',
+        gender: (item.gender || '保密') as Gender,
+        phone: item.phone || '',
+        position: item.job || '', // job对应position
+        recruitmentChannel: item.channel || '', // channel对应recruitmentChannel
+        status: item.statue as TalentStatus || '新候选人', // statue对应status
+        operator: item.inputer || '', // inputer对应operator
+        createTime: '',  // API没有提供，设置默认值
+        updateTime: '',  // API没有提供，设置默认值
+      }));
+      
+      setDataSource(talentInfoList); 
+      setTotal(totalCount);
     } catch (error) {
       console.error('获取人才列表失败:', error);
       message.error(intl.formatMessage({ id: 'talent.message.fetchFailed' }));
@@ -58,6 +96,7 @@ const TalentManagement: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, pageSize, searchParams]);
 
   const handlePageChange = (page: number, size: number) => {
@@ -119,7 +158,10 @@ const TalentManagement: React.FC = () => {
     
     setDeleteLoading(true);
     try {
-      await batchDeleteTalent(selectedRowKeys.map(key => key.toString()));
+      // 转换id为数字类型，新API要求数字类型的id数组
+      const ids = selectedRowKeys.map(key => Number(key));
+      await deleteTalents(ids);
+      
       message.success(intl.formatMessage(
         { id: 'talent.message.batchDeleteSuccess' }, 
         { count: selectedRowKeys.length }

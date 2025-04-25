@@ -3,7 +3,7 @@ import { Table, Button, Space, Tag, Tooltip, Modal, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { TalentInfo, TalentStatus } from '../../../types/talent';
-import { deleteTalent } from '../../../api/talent';
+import { deleteTalents } from '../../../api/talentapi';
 import './buttonStyles.css'; // 导入按钮样式
 import { useIntl } from 'react-intl';
 
@@ -49,7 +49,7 @@ const TalentTable: React.FC<TalentTableProps> = ({
     if (!currentRecord) return;
     
     try {
-      await deleteTalent(currentRecord.id);
+      await deleteTalents([Number(currentRecord.id)]);
       message.success('删除成功');
       setDeleteModalVisible(false);
       onRefresh();

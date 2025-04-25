@@ -18,6 +18,7 @@ export interface TalentInfo {
   position: string;
   recruitmentChannel: string;
   status: TalentStatus;
+  statue?: TalentStatus;
   entryTime?: string;
   operator: string;
   createTime: string;
@@ -25,13 +26,19 @@ export interface TalentInfo {
 }
 
 export interface TalentSearchParams {
+  id?: string;
   keyword?: string;
   status?: TalentStatus;
+  statue?: TalentStatus;
   recruitmentChannel?: string;
   startTime?: string;
   endTime?: string;
-  current: number;
-  pageSize: number;
+  current?: number;
+  pageSize?: number;
+  page?: number;
+  per_page?: number;
+  start_date?: string;
+  end_date?: string;
 }
 
 export interface TalentListResponse {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Form, Select, message } from 'antd';
 import { TalentStatus } from '../../../types/talent';
-import { batchUpdateStatus } from '../../../api/talent';
+import { updateTalentStatus } from '../../../api/talentapi';
 import { useIntl } from 'react-intl';
 
 const { Option } = Select;
@@ -49,7 +49,8 @@ const TalentStatusModal: React.FC<TalentStatusModalProps> = ({
       }
       
       setLoading(true);
-      await batchUpdateStatus(selectedIds, status);
+      const ids = selectedIds.map(id => Number(id));
+      await updateTalentStatus(ids, status);
       
       message.success(intl.formatMessage({ id: 'talent.message.statusUpdateSuccess' }));
       form.resetFields();

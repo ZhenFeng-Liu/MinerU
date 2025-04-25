@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Select, DatePicker, Radio, message, Row, Col } from 'antd';
+import { Modal, Form, Input, Select, Radio, message, Row, Col } from 'antd';
 import { TalentStatus, TalentInfo } from '../../../types/talent';
-import { createTalent, updateTalent } from '../../../api/talent';
+import { createTalent, updateTalent, TalentItem } from '../../../api/talentapi';
 import { useIntl } from 'react-intl';
 import dayjs from 'dayjs';
 
@@ -78,6 +78,11 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
         // 如果是编辑模式，填充表单数据
         const formData = {
           ...editingTalent,
+          // 根据新API映射字段
+          job: editingTalent.position,
+          channel: editingTalent.recruitmentChannel,
+          statue: editingTalent.status,
+          inputer: editingTalent.operator,
           // 将日期字符串转换为dayjs对象
           entryTime: editingTalent.entryTime ? dayjs(editingTalent.entryTime) : undefined
         };
@@ -98,16 +103,25 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
         values.entryTime = values.entryTime.format('YYYY-MM-DD');
       }
       
-      if (isEditing) {
+      // 将表单数据转换为API需要的格式
+      const talentData: TalentItem = {
+        name: values.name,
+        gender: values.gender,
+        phone: values.phone,
+        job: values.position || values.job, // 兼容两种字段名
+        channel: values.recruitmentChannel || values.channel, // 兼容两种字段名
+        statue: values.status || values.statue, // 兼容两种字段名
+        inputer: values.operator || values.inputer, // 兼容两种字段名
+      };
+      
+      if (isEditing && editingTalent) {
         // 编辑现有人才
-        await updateTalent({
-          ...values,
-          id: editingTalent!.id
-        });
+        talentData.id = Number(editingTalent.id); // API需要数字类型的ID
+        await updateTalent(talentData);
         message.success(intl.formatMessage({ id: 'talent.message.updateSuccess' }));
       } else {
         // 创建新人才
-        await createTalent(values);
+        await createTalent(talentData);
         message.success(intl.formatMessage({ id: 'talent.message.createSuccess' }));
       }
       
@@ -238,44 +252,23 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
           </Col>
         </Row>
         
-        {/* 底部额外字段（隐藏但保留其功能） */}
-        <div style={{ display: 'none' }}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="entryTime"
-                label={intl.formatMessage({ id: 'talent.form.entryTime' })}
-                dependencies={['status']}
-                rules={[
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (getFieldValue('status') === '待入职' && !value) {
-                        return Promise.reject(new Error(intl.formatMessage({ id: 'talent.form.entryTime.required' })));
-                      }
-                      return Promise.resolve();
-                    },
-                  }),
-                ]}
-              >
-                <DatePicker style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            
-            <Col span={12}>
-              <Form.Item
-                name="operator"
-                label={intl.formatMessage({ id: 'talent.form.operator' })}
-                rules={[{ required: true, message: intl.formatMessage({ id: 'talent.form.operator.required' }) }]}
-              >
-                <Select placeholder={intl.formatMessage({ id: 'talent.form.operator.placeholder' })}>
-                  {operators.map(operator => (
-                    <Option key={operator} value={operator}>{operator}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-        </div>
+        {/* 底部额外字段 */}
+        {/* <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="operator"
+              label={intl.formatMessage({ id: 'talent.form.operator' })}
+              required
+              rules={[{ required: true, message: intl.formatMessage({ id: 'talent.form.operator.required' }) }]}
+            >
+              <Select placeholder={intl.formatMessage({ id: 'talent.form.operator.placeholder' })}>
+                {operators.map(op => (
+                  <Option key={op} value={op}>{op}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row> */}
       </Form>
     </Modal>
   );
