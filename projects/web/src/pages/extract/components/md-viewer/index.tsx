@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Tooltip } from "antd";
+import { Tooltip, Button } from "antd";
 
 import cls from "classnames";
 import styles from "./index.module.scss";
@@ -16,7 +16,7 @@ import _ from "lodash";
 import { TaskIdResItem } from "@/api/extract";
 import useMdStore from "@/store/mdStore";
 import CodeMirror from "@/components/code-mirror";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import SaveStatus, { SaveStatusRef } from "@/components/SaveStatus";
 
 interface IMdViewerProps {
@@ -44,6 +44,8 @@ const MdViewer: React.FC<IMdViewerProps> = ({
   const { formatMessage } = useIntl();
   const [displayType, setDisplayType] = useState(MD_PREVIEW_TYPE.preview);
   const params = useParams();
+  const jobID = params?.jobID || "";
+  const navigate = useNavigate();
   const {
     setAllMdContentWithAnchor,
     allMdContentWithAnchor,
@@ -52,6 +54,7 @@ const MdViewer: React.FC<IMdViewerProps> = ({
     updateMdContent,
   } = useMdStore();
   const [lineWrap, setLineWrap] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const threshold = 562 - 427;
   const statusRef = useRef<SaveStatusRef>(null);
@@ -149,6 +152,22 @@ const MdViewer: React.FC<IMdViewerProps> = ({
     }
   };
 
+  const handleNavigateToTalent = () => {
+    setLoading(true);
+    
+    // 准备要传递的参数
+    const stateData = {
+      source: 'extractor',
+      id: jobID,
+      fileId: taskInfo?.file_key || '',
+      fileName: taskInfo?.fileName || ''
+    };
+    
+    setTimeout(() => {
+      navigate("/OpenSourceTools/Extractor/talent", { state: stateData });
+    }, 1500);
+  };
+
   return (
     <div className={cls(className)} ref={mdViewerPef}>
       <div
@@ -233,6 +252,17 @@ const MdViewer: React.FC<IMdViewerProps> = ({
             }
           />
         </Tooltip>
+        <span className="w-[1px] h-[0.75rem] bg-[#D7D8DD] ml-[1rem]"></span>
+        <Button 
+          type="primary" 
+          className="leading-0 ml-[1rem] p-2" 
+          color="primary" 
+          variant="filled"
+          loading={loading}
+          onClick={handleNavigateToTalent}
+        >
+          {formatMessage({ id: "extractor.button.feeding" })}
+        </Button>
       </div>
       <div
         className={cls(

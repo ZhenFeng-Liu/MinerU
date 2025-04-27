@@ -12,6 +12,7 @@ interface TalentFormModalProps {
   onCancel: () => void;
   onSuccess: () => void;
   editingTalent?: TalentInfo | null; // 如果为null则是新增，否则是编辑
+  initialData?: Partial<TalentInfo & TalentItem> | null; // 从路由传递过来的初始数据
 }
 
 const statusOptions: TalentStatus[] = [
@@ -63,7 +64,8 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
   visible,
   onCancel,
   onSuccess,
-  editingTalent
+  editingTalent,
+  initialData
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -88,6 +90,23 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
         };
         
         form.setFieldsValue(formData);
+      }else if (initialData) {
+        // 如果有初始数据（从路由state传递过来的数据）
+        console.log('使用初始数据填充表单:', initialData);
+        
+        // 根据初始数据结构设置表单字段
+        const formData = {
+          name: initialData.name || '',
+          gender: initialData.gender || '男',
+          phone: initialData.phone || '',
+          position: initialData.position || initialData.job || '',
+          recruitmentChannel: initialData.recruitmentChannel || initialData.channel || '',
+          status: initialData.status || initialData.statue || '新候选人',
+          operator: initialData.operator || initialData.inputer || operators[0],
+          analysis_task_id: initialData.id || ''
+        };
+        console.log('formData',formData);
+        form.setFieldsValue(formData);
       }
     }
   }, [visible, editingTalent, form]);
@@ -95,6 +114,8 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
+      
+      console.log('values', values); // 调试用，查看values中是否有analysis_task_id
       
       setLoading(true);
       
@@ -112,6 +133,7 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
         channel: values.recruitmentChannel || values.channel, // 兼容两种字段名
         statue: values.status || values.statue, // 兼容两种字段名
         inputer: values.operator || values.inputer, // 兼容两种字段名
+        analysis_task_id: values.analysis_task_id ? Number(values.analysis_task_id) : undefined // 转换为数字类型
       };
       
       if (isEditing && editingTalent) {
@@ -178,6 +200,11 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
           operator: operators[0]
         }}
       >
+        {/* 隐藏字段用于保存analysis_task_id */}
+        <Form.Item name="analysis_task_id" hidden>
+          <Input />
+        </Form.Item>
+        
         <Row gutter={16}>
           {/* 左列 */}
           <Col span={12}>
@@ -253,7 +280,7 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
         </Row>
         
         {/* 底部额外字段 */}
-        {/* <Row gutter={16}>
+        <Row gutter={16} hidden>
           <Col span={12}>
             <Form.Item
               name="operator"
@@ -268,7 +295,7 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
               </Select>
             </Form.Item>
           </Col>
-        </Row> */}
+        </Row>
       </Form>
     </Modal>
   );

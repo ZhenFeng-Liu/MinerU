@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Typography, Modal } from 'antd';
 import { PlusOutlined, UserSwitchOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+import { useLocation } from 'react-router-dom';
 import TalentTable from './components/TalentTable';
 import TalentSearch from './components/TalentSearch';
 import TalentStatusModal from './components/TalentStatusModal';
@@ -28,6 +29,7 @@ interface SearchFormValues {
 
 const TalentManagement: React.FC = () => {
   const intl = useIntl();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState<TalentInfo[]>([]);
   const [total, setTotal] = useState(0);
@@ -41,6 +43,16 @@ const TalentManagement: React.FC = () => {
   const [editingTalent, setEditingTalent] = useState<TalentInfo | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [searchParams, setSearchParams] = useState<Partial<TalentSearchParams>>({});
+  const [initialFormData, setInitialFormData] = useState(null);
+  // 打印传递过来的state数据
+  useEffect(() => {
+    if (location.state) {
+      console.log('接收到的跳转参数:', location.state);
+      // 设置初始表单数据
+      setInitialFormData(location.state);
+      handleAdd();
+    }
+  }, [location.state]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -251,9 +263,16 @@ const TalentManagement: React.FC = () => {
 
         <TalentFormModal
           visible={formModalVisible}
-          onCancel={() => setFormModalVisible(false)}
-          onSuccess={fetchData}
+          onCancel={() => {
+            setFormModalVisible(false);
+            setInitialFormData(null); // 关闭时清除初始数据
+          }}
+          onSuccess={() => {
+            fetchData();
+            setInitialFormData(null); // 成功提交后清除初始数据
+          }}
           editingTalent={editingTalent}
+          initialData={initialFormData}
         />
       </Card>
     </div>
