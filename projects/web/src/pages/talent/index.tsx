@@ -198,6 +198,7 @@ const TalentManagement: React.FC = () => {
           <Title level={4} className="m-0 whitespace-nowrap">{intl.formatMessage({ id: 'talent.title' })}</Title>
           <div className="flex flex-wrap gap-2">
             <Button
+              hidden
               type="primary"
               icon={<PlusOutlined />}
               onClick={handleAdd}
