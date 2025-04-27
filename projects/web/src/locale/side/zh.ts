@@ -6,7 +6,7 @@ import labelULogo from "@/assets/pdf/labelU.svg";
 export default {
   "extractor.side.tabList": [
     {
-      label: "PDF文档提取",
+      label: "简历投喂",
       type: EXTRACTOR_TYPE_LIST.pdf,
     },
     // {

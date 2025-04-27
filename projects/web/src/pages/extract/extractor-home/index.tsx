@@ -11,7 +11,7 @@ const ITEM_LIST = [
   {
     id: 1,
     icon: extractorPdfIcon,
-    [`zh-CN-title`]: "PDF文档提取",
+    [`zh-CN-title`]: "简历投喂",
     [`en-US-title`]: "PDF Document Extraction",
     type: EXTRACTOR_TYPE_LIST.pdf,
     [`zh-CN-desc`]:
@@ -91,11 +91,11 @@ const ExtractorHome = () => {
           );
         })}
       </div>
-      <div className="absolute bottom-[1.5rem] text-[13px] text-[#121316]/[0.35] text-center leading-[20px] max-w-[64rem]">
+      {/* <div className="absolute bottom-[1.5rem] text-[13px] text-[#121316]/[0.35] text-center leading-[20px] max-w-[64rem]">
         {formatMessage({
           id: "extractor.law",
         })}
-      </div>
+      </div> */}
     </div>
   );
 };

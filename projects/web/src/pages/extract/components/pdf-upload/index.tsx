@@ -105,11 +105,11 @@ const PdfUpload = () => {
           showIcon={false}
         />
       </div>
-      <div className="absolute bottom-[1.5rem] text-[13px] text-[#121316]/[0.35] text-center leading-[20px] max-w-[64rem]">
+      {/* <div className="absolute bottom-[1.5rem] text-[13px] text-[#121316]/[0.35] text-center leading-[20px] max-w-[64rem]">
         {formatMessage({
           id: "extractor.law",
         })}
-      </div>
+      </div> */}
     </div>
   );
 };

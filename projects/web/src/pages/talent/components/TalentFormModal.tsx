@@ -99,7 +99,7 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
           statue: editingTalent.status,
           inputer: editingTalent.operator,
           // 将日期字符串转换为dayjs对象
-          entryTime: editingTalent.entryTime ? dayjs(editingTalent.entryTime) : undefined
+          create_date: editingTalent.create_date ? dayjs(editingTalent.create_date) : undefined
         };
         
         form.setFieldsValue(formData);
@@ -137,8 +137,8 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
       setLoading(true);
       
       // 处理日期对象
-      if (values.entryTime) {
-        values.entryTime = values.entryTime.format('YYYY-MM-DD');
+      if (values.create_date) {
+        values.create_date = values.create_date.format('YYYY-MM-DD');
       }
       
       // 将表单数据转换为API需要的格式

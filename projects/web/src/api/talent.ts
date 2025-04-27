@@ -93,11 +93,11 @@ const generateMockData = (): TalentInfo[] => {
     const updateDate = new Date(createDate.getTime() + Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000);
     const updateTime = updateDate.toISOString().split('T')[0];
     
-    // 入职时间仅对"待入职"状态的人才有效
-    let entryTime = undefined;
+    // 入库时间仅对"待入职"状态的人才有效
+    let create_date = undefined;
     if (status === '待入职') {
       const entryDate = new Date(updateDate.getTime() + Math.floor(Math.random() * 15) * 24 * 60 * 60 * 1000);
-      entryTime = entryDate.toISOString().split('T')[0];
+      create_date = entryDate.toISOString().split('T')[0];
     }
 
     // 生成手机号
@@ -113,7 +113,7 @@ const generateMockData = (): TalentInfo[] => {
       position,
       recruitmentChannel,
       status,
-      entryTime,
+      create_date,
       operator,
       createTime,
       updateTime
@@ -153,11 +153,11 @@ export const getTalentList = async (params: TalentSearchParams): Promise<TalentL
     filteredData = filteredData.filter(item => item.recruitmentChannel === params.recruitmentChannel);
   }
 
-  // 入职时间范围筛选
+  // 入库时间范围筛选
   if (params.startTime && params.endTime) {
     filteredData = filteredData.filter(item => {
-      if (!item.entryTime) return false;
-      return item.entryTime >= params.startTime! && item.entryTime <= params.endTime!;
+      if (!item.create_date) return false;
+      return item.create_date >= params.startTime! && item.create_date <= params.endTime!;
     });
   }
 
@@ -209,7 +209,7 @@ export const createTalent = async (data: Omit<TalentInfo, 'id' | 'createTime' | 
     position: data.position,
     recruitmentChannel: data.recruitmentChannel,
     status: data.status,
-    entryTime: data.entryTime,
+    create_date: data.create_date,
     operator: data.operator,
     createTime: now,
     updateTime: now

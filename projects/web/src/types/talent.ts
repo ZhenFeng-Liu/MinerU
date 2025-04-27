@@ -19,7 +19,7 @@ export interface TalentInfo {
   recruitmentChannel: string;
   status: TalentStatus;
   statue?: TalentStatus;
-  entryTime?: string;
+  create_date?: string;
   operator: string;
   createTime: string;
   updateTime: string;

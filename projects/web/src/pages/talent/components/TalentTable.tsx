@@ -118,9 +118,9 @@ const TalentTable: React.FC<TalentTableProps> = ({
       ),
     },
     {
-      title: '入职时间',
-      dataIndex: 'entryTime',
-      key: 'entryTime',
+      title: '入库时间',
+      dataIndex: 'create_date',
+      key: 'create_date',
       width: 90,
     },
     {

@@ -92,6 +92,7 @@ const TalentManagement: React.FC = () => {
         recruitmentChannel: item.channel || '', // channel对应recruitmentChannel
         status: item.statue as TalentStatus || '新候选人', // statue对应status
         operator: item.inputer || '', // inputer对应operator
+        create_date: item.create_date || '', // create_date对应create_date
         createTime: '',  // API没有提供，设置默认值
         updateTime: '',  // API没有提供，设置默认值
         analysis_task_id: item.analysis_task_id ? Number(item.analysis_task_id) : undefined, // 转换为number类型 analysis_task_id对应analysis_task_id

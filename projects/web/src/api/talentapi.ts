@@ -17,6 +17,7 @@ export interface TalentItem {
   statue?: string;           // 状态
   inputer?: string;          // 录入人
   analysis_task_id?:string | number; // 分析任务ID
+  create_date?: string;      // 入库时间
 }
 
 /**
