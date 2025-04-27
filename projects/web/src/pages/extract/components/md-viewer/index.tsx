@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Tooltip, Button } from "antd";
+import { Tooltip, Button, Dropdown } from "antd";
 
 import cls from "classnames";
 import styles from "./index.module.scss";
@@ -168,6 +168,44 @@ const MdViewer: React.FC<IMdViewerProps> = ({
     }, 1500);
   };
 
+  const getDownloadMenuItems = () => {
+    return [
+      {
+        key: 'md',
+        label: 'Markdown',
+        icon: <IconFont type="icon-xiazai" />,
+        onClick: () => downloadFileUseAScript(
+          url,
+          `${_(taskInfo?.fileName).split(".").slice(0, -1).join(".")}.md`
+        )
+      },
+      {
+        key: 'pdf',
+        label: 'PDF',
+        icon: <IconFont type="icon-xiazai" />,
+        onClick: () => {
+          // 解析现有URL
+          const urlObj = new URL(url);
+          const pdfParam = urlObj.searchParams.get('pdf');
+          
+          // 构建新的基础URL（保持原始域名和端口）
+          const baseUrl = `${urlObj.protocol}//${urlObj.host}`;
+          
+          // 构建新的PDF下载URL，使用相同的基础URL
+          const pdfUrl = `${baseUrl}/api/v2/analysis/pdf_original?as_attachment=false&pdf=${pdfParam}`;
+          
+          console.log("Original URL:", url);
+          console.log("PDF download URL:", pdfUrl);
+          
+          downloadFileUseAScript(
+            pdfUrl,
+            `${_(taskInfo?.fileName).split(".").slice(0, -1).join(".")}.pdf`
+          );
+        }
+      }
+    ];
+  };
+
   return (
     <div className={cls(className)} ref={mdViewerPef}>
       <div
@@ -230,27 +268,25 @@ const MdViewer: React.FC<IMdViewerProps> = ({
               <img
                 className=" w-[1.125rem] h-[1.125rem] "
                 src={fullScreenSvg}
+                alt="Full screen"
               />
             ) : (
               <img
                 className=" w-[1.125rem] h-[1.125rem] "
                 src={exitFullScreenSvg}
+                alt="Exit full screen"
               />
             )}
           </span>
         </Tooltip>
         <span className="w-[1px] h-[0.75rem] bg-[#D7D8DD] ml-[1rem]"></span>
         <Tooltip title={formatMessage({ id: "extractor.button.download" })}>
-          <IconFont
-            type="icon-xiazai"
-            className="text-lg text-[#464a53] leading-0  ml-[1rem] cursor-pointer hover:bg-[#F4F5F9] p-1 rounded"
-            onClick={() =>
-              downloadFileUseAScript(
-                url,
-                `${_(taskInfo?.fileName).split(".").slice(0, -1).join(".")}.md`
-              )
-            }
-          />
+          <Dropdown menu={{ items: getDownloadMenuItems() }} placement="bottom" arrow>
+            <IconFont
+              type="icon-xiazai"
+              className="text-lg text-[#464a53] leading-0 ml-[1rem] cursor-pointer hover:bg-[#F4F5F9] p-1 rounded"
+            />
+          </Dropdown>
         </Tooltip>
         <span className="w-[1px] h-[0.75rem] bg-[#D7D8DD] ml-[1rem]"></span>
         <Button 

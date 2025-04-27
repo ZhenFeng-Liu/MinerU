@@ -180,14 +180,15 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
                     },
                   }}
                 >
-                  <IconFont
+                  {/* 完全隐藏删除图标 */}
+                  {/* <IconFont
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
                     }}
                     type="icon-shanchu"
                     className="hidden ml-auto text-[1rem] text-[#121316]/[0.8] hover:text-[#0D53DE] group-hover:block"
-                  />
+                  /> */}
                 </Popconfirm>
               </>
             </div>

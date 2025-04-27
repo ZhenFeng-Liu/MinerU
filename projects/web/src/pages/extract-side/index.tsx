@@ -1,4 +1,4 @@
-import DarkLogo from "@/assets/svg/logo.svg";
+import DarkLogo from "@/assets/logo.png";
 
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import commonStyles from "./index.module.scss";
@@ -11,7 +11,7 @@ import extractorFormulaIcon from "@/assets/pdf/extractor-formula.svg";
 import { UserOutlined } from '@ant-design/icons';
 import { useIntl } from "react-intl";
 import cls from "classnames";
-import ExtractorGuide from "@/pages/extract/components/extractor-guide";
+// import ExtractorGuide from "@/pages/extract/components/extractor-guide";
 import ExtractorQueue from "@/pages/extract/components/extractor-queue";
 import ExtractorLang from "@/pages/extract/components/extractor-lang";
 
@@ -87,7 +87,7 @@ export const ExtractorSide = ({ className = "" }: IExtractorSideProps) => {
             alt=""
             onClick={goToOpenSource}
           />
-          <ExtractorGuide />
+          {/* <ExtractorGuide/> */}
         </div>
 
         {/* tab-list */}

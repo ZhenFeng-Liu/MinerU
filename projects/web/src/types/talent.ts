@@ -23,6 +23,7 @@ export interface TalentInfo {
   operator: string;
   createTime: string;
   updateTime: string;
+  analysis_task_id?: number;
 }
 
 export interface TalentSearchParams {

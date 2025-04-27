@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select, Radio, message, Row, Col } from 'antd';
 import { TalentStatus, TalentInfo } from '../../../types/talent';
 import { createTalent, updateTalent, TalentItem } from '../../../api/talentapi';
 import { useIntl } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 const { Option } = Select;
@@ -71,11 +72,23 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
   const [loading, setLoading] = useState(false);
   const intl = useIntl();
   const isEditing = !!editingTalent;
+  const [searchParams] = useSearchParams();
+  const inputerFromUrl = searchParams.get('inputer');
+
+  // 从 URL 查询参数中获取 inputer（#前的查询参数）
+  const getInputerFromUrl = () => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return urlSearchParams.get('inputer');
+  };
+  const inputerFromUrlDirect = getInputerFromUrl();
+  
+  console.log('inputerFromUrl (useSearchParams):', inputerFromUrl);
+  console.log('inputerFromUrlDirect (window.location):', inputerFromUrlDirect);
 
   useEffect(() => {
     if (visible) {
       form.resetFields();
-      
+      console.log('inputerFromUrl',inputerFromUrl);
       if (editingTalent) {
         // 如果是编辑模式，填充表单数据
         const formData = {
@@ -102,14 +115,18 @@ const TalentFormModal: React.FC<TalentFormModalProps> = ({
           position: initialData.position || initialData.job || '',
           recruitmentChannel: initialData.recruitmentChannel || initialData.channel || '',
           status: initialData.status || initialData.statue || '新候选人',
-          operator: initialData.operator || initialData.inputer || operators[0],
+          operator: inputerFromUrlDirect || inputerFromUrl  || initialData.operator || initialData.inputer || operators[0],
           analysis_task_id: initialData.id || ''
         };
         console.log('formData',formData);
         form.setFieldsValue(formData);
+      } else if (inputerFromUrlDirect || inputerFromUrl) {
+        // 如果没有初始数据，但URL中有inputer参数
+        const operatorValue = inputerFromUrlDirect || inputerFromUrl;
+        form.setFieldsValue({ operator: operatorValue });
       }
     }
-  }, [visible, editingTalent, form]);
+  }, [visible, editingTalent, form, inputerFromUrl,inputerFromUrlDirect, initialData]);
 
   const handleOk = async () => {
     try {

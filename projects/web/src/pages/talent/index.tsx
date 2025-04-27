@@ -94,6 +94,7 @@ const TalentManagement: React.FC = () => {
         operator: item.inputer || '', // inputer对应operator
         createTime: '',  // API没有提供，设置默认值
         updateTime: '',  // API没有提供，设置默认值
+        analysis_task_id: item.analysis_task_id ? Number(item.analysis_task_id) : undefined, // 转换为number类型 analysis_task_id对应analysis_task_id
       }));
       
       setDataSource(talentInfoList); 

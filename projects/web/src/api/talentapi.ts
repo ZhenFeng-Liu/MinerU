@@ -16,7 +16,7 @@ export interface TalentItem {
   channel?: string;          // 渠道
   statue?: string;           // 状态
   inputer?: string;          // 录入人
-  analysis_task_id?: number; // 分析任务ID
+  analysis_task_id?:string | number; // 分析任务ID
 }
 
 /**

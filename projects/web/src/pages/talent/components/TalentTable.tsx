@@ -6,7 +6,7 @@ import { TalentInfo, TalentStatus } from '../../../types/talent';
 import { deleteTalents } from '../../../api/talentapi';
 import './buttonStyles.css'; // 导入按钮样式
 import { useIntl } from 'react-intl';
-
+import { useNavigate } from "react-router-dom";
 interface TalentTableProps {
   dataSource: TalentInfo[];
   loading: boolean;
@@ -44,7 +44,7 @@ const TalentTable: React.FC<TalentTableProps> = ({
   const intl = useIntl();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [currentRecord, setCurrentRecord] = useState<TalentInfo | null>(null);
-
+  const navigate = useNavigate();
   const handleDelete = async () => {
     if (!currentRecord) return;
     
@@ -57,6 +57,22 @@ const TalentTable: React.FC<TalentTableProps> = ({
       console.error('删除失败:', error);
       message.error('删除失败');
     }
+  };
+
+  const handleView = (
+    // originType: ExtractTaskType,
+     id: string) => {
+    // const type = originType?.split("-")[0];
+    // const detailType = originType?.split("-")[1];
+
+    // if (type === EXTRACTOR_TYPE_LIST.formula.toLowerCase()) {
+    //   navigate(`/OpenSourceTools/Extractor/formula/${id}?type=${detailType}`);
+    // } else if (type === EXTRACTOR_TYPE_LIST.pdf.toLowerCase()) {
+      navigate(`/OpenSourceTools/Extractor/PDF/${id}`);
+    // } else if (type === EXTRACTOR_TYPE_LIST.table.toLocaleLowerCase()) {
+      // navigate(`/OpenSourceTools/Extractor/table/${id}`);
+    // }
+    return;
   };
 
   const columns: ColumnsType<TalentInfo> = [
@@ -132,7 +148,13 @@ const TalentTable: React.FC<TalentTableProps> = ({
             <Button 
               type="text" 
               icon={<EyeOutlined />} 
-              onClick={() => onEdit(record)} 
+              onClick={() => {
+                console.log("record:", record);
+                // 打印可能存在的analysis_task_id
+                if (record.analysis_task_id !== undefined) {
+                  handleView(String(record.analysis_task_id));
+                }
+              }} 
               className="no-outline-btn" // 应用自定义样式
             ></Button>
           </Tooltip>
