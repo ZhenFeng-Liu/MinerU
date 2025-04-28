@@ -291,13 +291,14 @@ const MdViewer: React.FC<IMdViewerProps> = ({
         <span className="w-[1px] h-[0.75rem] bg-[#D7D8DD] ml-[1rem]"></span>
         <Button 
           type="primary" 
-          className="leading-0 ml-[1rem] p-2" 
+          className={`leading-0 ml-[1rem] p-2 ${taskInfo?.is_fed === 1 ? "bg-green-600 hover:bg-green-500" : ""}`} 
           color="primary" 
           variant="filled"
           loading={loading}
           onClick={handleNavigateToTalent}
+          disabled={taskInfo?.is_fed === 1 && !loading}
         >
-          {formatMessage({ id: "extractor.button.feeding" })}
+          {taskInfo?.is_fed === 1 ? "已投喂" : formatMessage({ id: "extractor.button.feeding" })}
         </Button>
       </div>
       <div

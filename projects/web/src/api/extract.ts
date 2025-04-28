@@ -96,6 +96,7 @@ export interface TaskIdResItem {
   state: "running" | "done" | "pending" | "failed" | "unknown";
   markdownUrl: string[];
   file_key?: string;
+  is_fed?: number; // 0=未投喂, 1=已投喂
 }
 
 export type TaskIdRes = TaskIdResItem[];
