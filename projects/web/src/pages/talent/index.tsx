@@ -65,6 +65,7 @@ const TalentManagement: React.FC = () => {
         per_page: pageSize,
         start_date: searchParams.startTime,
         end_date: searchParams.endTime,
+        channel: searchParams.recruitmentChannel, // 添加recruitmentChannel到channel的映射
       };
       
       // 如果有id参数，添加到查询中

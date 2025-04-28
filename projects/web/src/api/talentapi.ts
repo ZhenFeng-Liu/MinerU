@@ -27,6 +27,7 @@ export interface TalentQueryParams {
   id?: string;                // 按ID查询
   keyword?: string;           // 关键词搜索
   statue?: string;            // 状态筛选
+  channel?: string;           // 招聘渠道筛选
   page?: string | number;     // 页码
   per_page?: string | number; // 每页条数
   start_date?: string;        // 开始日期

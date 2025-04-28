@@ -147,7 +147,7 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
               onClick={() => handleExtractor(i.type as any, i.id)}
             >
               <span className="truncate mr-2 max-w-[calc(100%-2rem)]">
-                <TextTooltip trigger="hover" str={i?.fileName} />
+                <TextTooltip trigger="hover" str={i?.originalFileName} />
               </span>
               <>
                 {i?.state === "failed" && (
