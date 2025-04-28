@@ -6,7 +6,7 @@ import styles from "./index.module.scss";
 import { useDeepCompareEffect, useHover } from "ahooks";
 import IconFont from "@/components/icon-font";
 import { downloadFileUseAScript } from "@/utils/download";
-import { MD_DRIVE_PDF } from "@/constant/event";
+// import { MD_DRIVE_PDF } from "@/constant/event";
 import { useIntl } from "react-intl";
 import LazyUrlMarkdown from "../url-markdown";
 import exitFullScreenSvg from "@/assets/pdf/exitFullScreen.svg";
@@ -91,51 +91,51 @@ const MdViewer: React.FC<IMdViewerProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (isHovering) return;
-    pushMdViewerScroll();
-  }, [curPage, isHovering]);
+  // useEffect(() => {
+  //   if (isHovering) return;
+  //   pushMdViewerScroll();
+  // }, [curPage, isHovering]);
 
   useEffect(() => {
     pushMdViewerScroll("instant");
   }, [displayType]);
 
-  useEffect(() => {
-    if (!isHovering) return;
-    const handleScroll = () => {
-      if (!containerRef.current) return;
+  // useEffect(() => {
+  //   if (!isHovering) return;
+  //   const handleScroll = () => {
+  //     if (!containerRef.current) return;
 
-      taskInfo?.markdownUrl?.forEach((page, index) => {
-        const element =
-          displayType === MD_PREVIEW_TYPE.preview
-            ? document.getElementById(`md-anchor-${index}`)?.parentElement
-            : document.getElementById(`code-${index}`);
+  //     taskInfo?.markdownUrl?.forEach((page, index) => {
+  //       const element =
+  //         displayType === MD_PREVIEW_TYPE.preview
+  //           ? document.getElementById(`md-anchor-${index}`)?.parentElement
+  //           : document.getElementById(`code-${index}`);
 
-        if (element) {
-          const rect = element.getBoundingClientRect();
+  //       if (element) {
+  //         const rect = element.getBoundingClientRect();
 
-          if (rect.top <= threshold) {
-            document.dispatchEvent(
-              new CustomEvent(MD_DRIVE_PDF, {
-                detail: index,
-              })
-            );
-          }
-        }
-      });
-    };
+  //         if (rect.top <= threshold) {
+  //           document.dispatchEvent(
+  //             new CustomEvent(MD_DRIVE_PDF, {
+  //               detail: index,
+  //             })
+  //           );
+  //         }
+  //       }
+  //     });
+  //   };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
+  //   const container = containerRef.current;
+  //   if (container) {
+  //     container.addEventListener("scroll", handleScroll);
+  //   }
 
-    return () => {
-      if (container) {
-        container?.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [taskInfo, isHovering, displayType]);
+  //   return () => {
+  //     if (container) {
+  //       container?.removeEventListener("scroll", handleScroll);
+  //     }
+  //   };
+  // }, [taskInfo, isHovering, displayType]);
 
   useDeepCompareEffect(() => {
     if (taskInfo?.markdownUrl) {

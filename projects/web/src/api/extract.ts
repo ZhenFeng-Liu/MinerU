@@ -120,6 +120,7 @@ interface TaskHistoryResponse {
 }
 
 interface TaskItem {
+  originalFileName?: string;
   fileName: string;
   id: string;
   type: string;

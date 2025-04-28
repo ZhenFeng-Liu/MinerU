@@ -1,4 +1,4 @@
-import { MD_DRIVE_PDF } from "@/constant/event";
+// import { MD_DRIVE_PDF } from "@/constant/event";
 import { message } from "antd";
 import { TaskIdProgress, TaskIdResItem } from "@/api/extract";
 import React, { useEffect, useRef } from "react";
@@ -115,18 +115,18 @@ const PDFViewer = ({
     };
   }, []);
 
-  useEffect(() => {
-    const handlePageChange = ({ detail }: CustomEvent) => {
-      sendMessageToIframe("setPage", detail + 1);
-    };
-    document.addEventListener(MD_DRIVE_PDF, handlePageChange as EventListener);
-    return () => {
-      document.removeEventListener(
-        MD_DRIVE_PDF,
-        handlePageChange as EventListener
-      );
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handlePageChange = ({ detail }: CustomEvent) => {
+  //     sendMessageToIframe("setPage", detail + 1);
+  //   };
+  //   document.addEventListener(MD_DRIVE_PDF, handlePageChange as EventListener);
+  //   return () => {
+  //     document.removeEventListener(
+  //       MD_DRIVE_PDF,
+  //       handlePageChange as EventListener
+  //     );
+  //   };
+  // }, []);
 
   return (
     <>

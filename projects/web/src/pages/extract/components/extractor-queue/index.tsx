@@ -28,7 +28,7 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
   const { data: taskList, mutate } = useRequest(() => {
     return getExtractorHistory({
       pageNo: 1,
-      pageSize: 100,
+      pageSize: 1000,
     }).then((res) => {
       return res?.list?.filter((i) => !!i.id && !!i.type) || [];
     });
@@ -77,8 +77,21 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
     }, 10);
   };
   const taskListRef = useLatest(taskList);
+
+  const refreshTaskList = () => {
+    getExtractorHistory({
+      pageNo: 1,
+      pageSize: 1000,
+    }).then((res) => {
+      if (res?.list) {
+        mutate(res.list.filter((i) => !!i.id && !!i.type));
+      }
+    });
+  };
+
   const handleAddList = ({ detail }: CustomEvent) => {
     const taskData = detail as any;
+    console.log('taskData', taskData)
     mutate(
       [
         {
@@ -89,6 +102,11 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
         } as any,
       ].concat(taskListRef?.current)
     );
+
+    // 然后刷新整个列表以获取完整信息
+    setTimeout(() => {
+      refreshTaskList();
+    }, 500); // 延迟一点时间让后端有时间处理
   };
 
   useEffect(() => {
@@ -137,6 +155,7 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
       </header>
       <hgroup className="overflow-auto flex-1 scrollbar-thin">
         {taskList?.map((i, index) => {
+          // console.log('i', i)
           return (
             <div
               className={cls(
@@ -147,7 +166,7 @@ const ExtractorQueue: React.FC<ExtractorQueueProps> = ({ className }) => {
               onClick={() => handleExtractor(i.type as any, i.id)}
             >
               <span className="truncate mr-2 max-w-[calc(100%-2rem)]">
-                <TextTooltip trigger="hover" str={i?.originalFileName} />
+                <TextTooltip trigger="hover" str={i?.originalFileName || i?.fileName} />
               </span>
               <>
                 {i?.state === "failed" && (
